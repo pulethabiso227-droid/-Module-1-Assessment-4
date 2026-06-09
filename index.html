@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON NOIR — Curated Objects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0c0a;
+    --parchment: #f5f0e8;
+    --cream: #faf7f2;
+    --gold: #c9a96e;
+    --gold-light: #e8d5a8;
+    --muted: #8a8070;
+    --border: rgba(201,169,110,0.25);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: var(--sans);
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem;
+    height: 70px;
+    background: rgba(13,12,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    cursor: pointer;
+    font-weight: 400;
+  }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-link {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s;
+    background: none; border: none; font-family: var(--sans);
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-link:hover, .nav-link.active { color: var(--gold); }
+  .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+  /* ── PAGES ───────────────────────────────────────── */
+  .page { display: none; padding-top: 70px; min-height: 100vh; animation: fadeIn 0.4s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── HOME ────────────────────────────────────────── */
+  .home-hero {
+    padding: 7rem 3rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 300; line-height: 1.05;
+    color: var(--cream);
+    max-width: 700px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    margin-top: 1.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    max-width: 420px;
+    line-height: 1.8;
+  }
+
+  /* ── CATALOGUE GRID ──────────────────────────────── */
+  .catalogue-section { padding: 4rem 3rem 6rem; }
+  .section-label {
+    font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .product-card {
+    background: var(--ink);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .product-card:hover .product-card-img {
+  filter: brightness(0.98) saturate(1);
+  transform: scale(1.03);
+}
+  .product-card:hover { background: #161410; }
+  .product-card-img {
+    width: 100%; aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.88) saturate(0.9);
+    transition: filter 0.5s, transform 0.6s;
+  }
+  .product-card:hover .product-card-img { filter: brightness(0.98) saturate(1); transform: scale(1.03); }
+  .product-card-body { padding: 1.4rem 1.5rem 1.8rem; }
+  .product-card-num {
+    font-size: 0.58rem; letter-spacing: 0.3em; color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .product-card-name {
+    font-family: var(--serif);
+    font-size: 1.35rem; font-weight: 400;
+    color: var(--cream); line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+  .product-card-tag { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .product-card-price {
+    font-family: var(--serif); font-size: 1.1rem;
+    color: var(--gold-light);
+  }
+  .card-arrow {
+    position: absolute; top: 1.4rem; right: 1.5rem;
+    width: 32px; height: 32px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; color: var(--muted);
+    transition: all 0.3s; border-radius: 50%;
+  }
+  .product-card:hover .card-arrow { border-color: var(--gold); color: var(--gold); transform: translate(2px,-2px); }
+
+  /* ── PRODUCT DETAIL ──────────────────────────────── */
+  #page-product { display: none; }
+  #page-product.active { display: block; }
+
+  .product-detail-header {
+    padding: 4rem 3rem 2rem;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .back-btn {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; background: none; border: none;
+    font-family: var(--sans); transition: color 0.3s; margin-bottom: 0.5rem;
+  }
+  .back-btn:hover { color: var(--gold); }
+  .pd-breadcrumb {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pd-breadcrumb span { color: var(--gold); }
+
+  .product-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 80vh;
+  }
+  @media (max-width: 800px) { .product-detail-layout { grid-template-columns: 1fr; } }
+
+  .pd-gallery { padding: 2rem 3rem; border-right: 1px solid var(--border); }
+  .pd-main-img {
+    width: 100%; aspect-ratio: 4/5; object-fit: cover;
+    display: block; margin-bottom: 1rem;
+    filter: brightness(0.92);
+  }
+  .pd-thumbs { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .pd-thumb {
+    width: 80px; height: 80px; object-fit: cover;
+    cursor: pointer; border: 2px solid transparent;
+    transition: border-color 0.3s, filter 0.3s;
+    filter: brightness(0.75);
+  }
+  .pd-thumb.active, .pd-thumb:hover { border-color: var(--gold); filter: brightness(0.95); }
+
+  .pd-info { padding: 2rem 3rem; }
+  .pd-category { font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+  .pd-title {
+    font-family: var(--serif); font-size: clamp(2rem,4vw,3.2rem);
+    font-weight: 300; color: var(--cream); line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .pd-price-row { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .pd-price { font-family: var(--serif); font-size: 2rem; color: var(--gold-light); }
+  .pd-stock { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; }
+  .stock-yes { color: #6ebd8a; }
+  .stock-low { color: #e8a46e; }
+  .stock-no  { color: #bd6e6e; }
+
+  .pd-desc {
+    font-size: 0.88rem; line-height: 1.9; color: #b0a898;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0; margin-bottom: 1.5rem;
+  }
+
+  /* Info table */
+  .pd-table-title { font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .pd-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; font-size: 0.8rem; }
+  .pd-table tr { border-bottom: 1px solid var(--border); }
+  .pd-table td { padding: 0.75rem 0; }
+  .pd-table td:first-child { color: var(--muted); letter-spacing: 0.1em; width: 45%; }
+  .pd-table td:last-child { color: var(--parchment); text-align: right; }
+
+  .buy-btn {
+    width: 100%; padding: 1.1rem;
+    background: var(--gold);
+    color: var(--ink);
+    border: none; cursor: pointer;
+    font-family: var(--sans);
+    font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+    font-weight: 400;
+    transition: background 0.3s, transform 0.15s;
+    position: relative; overflow: hidden;
+  }
+  .buy-btn::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.12); opacity: 0; transition: opacity 0.3s;
+  }
+  .buy-btn:hover { background: var(--gold-light); }
+  .buy-btn:hover::after { opacity: 1; }
+  .buy-btn:active { transform: scale(0.985); }
+
+  /* ── ABOUT PAGE ──────────────────────────────────── */
+  .about-hero {
+    padding: 5rem 3rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .about-title { font-family: var(--serif); font-size: clamp(2.5rem,6vw,5rem); font-weight: 300; color: var(--cream); line-height: 1.1; margin-bottom: 2rem; }
+  .about-title em { font-style: italic; color: var(--gold); }
+
+  .about-body { padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+  @media (max-width:700px) { .about-body { grid-template-columns: 1fr; gap: 2rem; } }
+  .about-text { font-size: 0.9rem; line-height: 2; color: #b0a898; }
+  .about-text p { margin-bottom: 1.2rem; }
+  .about-text strong { color: var(--gold); font-weight: 400; }
+
+  .about-stats { display: flex; flex-direction: column; gap: 2rem; }
+  .stat-item { border-left: 2px solid var(--gold); padding-left: 1.5rem; }
+  .stat-num { font-family: var(--serif); font-size: 3rem; color: var(--gold); line-height: 1; }
+  .stat-label { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+
+  .about-categories { padding: 0 3rem 5rem; }
+  .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 2rem; }
+  .cat-item { background: var(--ink); padding: 1.5rem; text-align: center; }
+  .cat-icon { font-size: 1.6rem; margin-bottom: 0.7rem; }
+  .cat-name { font-family: var(--serif); font-size: 1.1rem; color: var(--cream); }
+
+  /* ── CONTACT PAGE ────────────────────────────────── */
+  .contact-layout { padding: 4rem 3rem 6rem; display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; }
+  @media (max-width:750px) { .contact-layout { grid-template-columns: 1fr; gap: 3rem; } }
+
+  .contact-info h2 { font-family: var(--serif); font-size: 2.5rem; font-weight: 300; color: var(--cream); margin-bottom: 1rem; }
+  .contact-info h2 em { font-style: italic; color: var(--gold); }
+  .contact-info p { font-size: 0.85rem; line-height: 1.9; color: var(--muted); margin-bottom: 2rem; }
+
+  .contact-items { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+  .c-icon { width: 36px; height: 36px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; margin-top: 2px; }
+  .c-label { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+  .c-val { font-size: 0.85rem; color: var(--parchment); line-height: 1.5; }
+
+  .contact-form-title { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--cream); margin-bottom: 2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (max-width:500px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+  .form-group label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .form-group input, .form-group textarea, .form-group select {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    color: var(--parchment); padding: 0.85rem 1rem;
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 300;
+    outline: none; transition: border-color 0.3s;
+    width: 100%;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--muted); }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group select option { background: #1a1814; }
+  .submit-btn {
+    padding: 1rem 2.5rem;
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s; font-weight: 300;
+  }
+  .submit-btn:hover { background: var(--gold); color: var(--ink); }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    font-size: 0.65rem; letter-spacing: 0.18em; color: var(--muted);
+  }
+  .footer-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); letter-spacing: 0.2em; }
+
+  /* ── TOAST ───────────────────────────────────────── */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    background: var(--gold); color: var(--ink);
+    padding: 1rem 1.8rem;
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    transform: translateY(6rem); opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ───────────────────────────────────── -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">MAISON NOIR</div>
+  <div class="nav-links">
+    <button class="nav-link active" id="nav-home" onclick="showPage('home')">Home</button>
+    <button class="nav-link" id="nav-about" onclick="showPage('about')">About</button>
+    <button class="nav-link" id="nav-contact" onclick="showPage('contact')">Contact Us</button>
+  </div>
+</nav>
+
+<!-- ── HOME PAGE ─────────────────────────────────────── -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="hero-eyebrow">Curated Objects · Est. 2019</div>
+    <h1 class="hero-title">Objects of <em>lasting</em><br>distinction</h1>
+    <p class="hero-sub">Five exceptional pieces, sourced from the world's most discerning artisans. Each one a quiet statement of considered taste.</p>
+  </div>
+  <div class="catalogue-section">
+    <div class="section-label">Current Collection</div>
+    <div class="product-grid" id="product-grid"></div>
+  </div>
+  <footer>
+    <span class="footer-logo">MAISON NOIR</span>
+    <span>© 2026 Maison Noir Ltd. All rights reserved.</span>
+    <span>Free worldwide shipping on orders over $300</span>
+  </footer>
+</div>
+
+<!-- ── PRODUCT DETAIL PAGE ───────────────────────────── -->
+<div class="page" id="page-product">
+  <div class="product-detail-header">
+    <div>
+      <button class="back-btn" onclick="showPage('home')">← Return to Catalogue</button>
+      <div class="pd-breadcrumb">Home / Collection / <span id="pd-bc-name">—</span></div>
+    </div>
+  </div>
+  <div class="product-detail-layout">
+    <div class="pd-gallery">
+      <img id="pd-main-img" class="pd-main-img" src="" alt="" />
+      <div class="pd-thumbs" id="pd-thumbs"></div>
+    </div>
+    <div class="pd-info">
+      <div class="pd-category" id="pd-category"></div>
+      <h2 class="pd-title" id="pd-title"></h2>
+      <div class="pd-price-row">
+        <div class="pd-price" id="pd-price"></div>
+        <div class="pd-stock" id="pd-stock"></div>
+      </div>
+      <p class="pd-desc" id="pd-desc"></p>
+      <div class="pd-table-title">Product Information</div>
+      <table class="pd-table" id="pd-table"></table>
+      <button class="buy-btn" onclick="handleBuy()">Buy Now — Add to Bag</button>
+    </div>
+  </div>
+  <footer>
+    <span class="footer-logo">MAISON NOIR</span>
+    <span>© 2026 Maison Noir Ltd. All rights reserved.</span>
+    <span>Secure checkout · Free returns</span>
+  </footer>
+</div>
+
+<!-- ── ABOUT PAGE ─────────────────────────────────────── -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <div class="hero-eyebrow">Our Story</div>
+    <h1 class="about-title">A house built on<br><em>obsessive</em> curation</h1>
+  </div>
+  <div class="about-body">
+    <div class="about-text">
+      <p>Maison Noir was founded in 2019 in the belief that <strong>true luxury</strong> is not about abundance — it is about the precise selection of the few. We exist to help you live with less, but better.</p>
+      <p>Every product in our catalogue passes a rigorous selection process. We visit makers personally, scrutinise the provenance of every material, and refuse to list anything we would not own ourselves. If it fails to move us, it doesn't make the cut.</p>
+      <p>We work with <strong>independent ateliers</strong> across Japan, Scandinavia, Italy, and the British Isles — small workshops where generations of skill are poured into every object. We believe the maker's story is inseparable from the product itself.</p>
+      <p>Our catalogue is intentionally small. Five objects at a time, rotated seasonally. We would rather show you five extraordinary things than five hundred mediocre ones.</p>
+      <p><strong>Maison Noir ships globally</strong>, with care. Every order is hand-wrapped in archival tissue, sealed with our wax stamp, and shipped in a bespoke rigid box. Unboxing should feel like an occasion.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">Objects in current collection</div></div>
+      <div class="stat-item"><div class="stat-num">23</div><div class="stat-label">Independent makers, worldwide</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Collections released per year</div></div>
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Authenticity guaranteed</div></div>
+    </div>
+  </div>
+  <div class="about-categories">
+    <div class="section-label">What We Curate</div>
+    <div class="cat-grid">
+      <div class="cat-item"><div class="cat-icon">⌚</div><div class="cat-name">Horology</div></div>
+      <div class="cat-item"><div class="cat-icon">✒️</div><div class="cat-name">Writing</div></div>
+      <div class="cat-item"><div class="cat-icon">🕯️</div><div class="cat-name">Atmosphere</div></div>
+      <div class="cat-item"><div class="cat-icon">📖</div><div class="cat-name">Paper</div></div>
+      <div class="cat-item"><div class="cat-icon">🔭</div><div class="cat-name">Instruments</div></div>
+    </div>
+  </div>
+  <footer>
+    <span class="footer-logo">MAISON NOIR</span>
+    <span>© 2026 Maison Noir Ltd. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- ── CONTACT PAGE ───────────────────────────────────── -->
+<div class="page" id="page-contact">
+  <div style="padding: 4rem 3rem 1rem; border-bottom: 1px solid var(--border);">
+    <div class="hero-eyebrow">Get In Touch</div>
+    <h1 style="font-family: var(--serif); font-size: clamp(2.5rem,5vw,4rem); font-weight:300; color: var(--cream);">We would love<br><em style="font-style:italic;color:var(--gold);">to hear from you</em></h1>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <p>Whether you have a question about a product, need help with an order, or simply wish to discuss objects of beauty — our team is at your service, Monday through Friday.</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="c-icon">📍</div>
+          <div><div class="c-label">Address</div><div class="c-val">22458 igalufa Street<br>Gauteng, W1S 3DL<br>South Africa</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="c-icon">📞</div>
+          <div><div class="c-label">phone</div><div class="c-val">+27 69 7946 0321</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="c-icon">✉️</div>
+          <div><div class="c-label">Email</div><div class="c-val">hello@maisonnoir.com<br>orders@maisonnoir.com</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="c-icon">⏰</div>
+          <div><div class="c-label">Hours</div><div class="c-val">Monday – Friday<br>10:00 – 18:00 GMT</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="contact-form-title">Send a Message</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="James">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Ashford">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="james@example.com">
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select>
+          <option value="">— Select a subject —</option>
+          <option>Product Enquiry</option>
+          <option>Order Support</option>
+          <option>Returns & Exchanges</option>
+          <option>Press & Collaborations</option>
+          <option>General Question</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us how we can help you…"></textarea>
+      </div>
+      <button class="submit-btn" onclick="handleSubmit()">Send Message</button>
+    </div>
+  </div>
+  <footer>
+    <span class="footer-logo">MAISON NOIR</span>
+    <span>© 2026 Maison Noir Ltd. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- ── TOAST ──────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── PRODUCT DATA ─────────────────────────────────────────────────────────────
+const products = [
+  {
+    id: 1,
+    name: "Atelier No. 7 Fountain Pen",
+    category: "Writing Instruments",
+    tag: "Japanese Urushi Lacquer",
+    price: "R485",
+    priceNum: 485,
+    stock: 6,
+    images: [
+      "photo_2026-06-09_07-37-27.jpg",
+      "photo_2026-06-09_07-37-33.jpg",
+      "photo_2026-06-09_07-37-38.jpg",
+      "photo_2026-06-09_07-37-42.jpg",
+    ],
+    description: "Produced in limited quantities by a family atelier in Kyoto operating since 1891, the No. 7 is finished in twelve layers of hand-applied Urushi lacquer — a process requiring six weeks per barrel. The 18-karat gold nib, hand-ground by a single craftsman, offers an utterly unique writing character that only deepens with use. This is not an instrument you own; it is one that gradually owns you.",
+    specs: [
+      ["Material", "Ebonite core, Urushi lacquer"],
+      ["Nib", "18k gold, medium fine"],
+      ["Length (capped)", "142 mm"],
+      ["Length (posted)", "163 mm"],
+      ["Weight", "28 g"],
+      ["Fill mechanism", "Piston converter"],
+      ["Country of origin", "Japan"],
+      ["Barcode (EAN-13)", "4 907658 234100"],
+    ],
+  },
+  {
+    id: 2,
+    name: "Nordlys Table Candleholder",
+    category: "Atmospheric Objects",
+    tag: "Hand-blown Smoked Glass",
+    price: "R210",
+    priceNum: 210,
+    stock: 14,
+    images: [
+      "photo_2026-06-09_07-46-11.jpg",
+      "photo_2026-06-09_07-46-18.jpg",
+      "photo_2026-06-09_07-46-22.jpg",
+      "photo_2026-06-09_07-46-26.jpg",
+    ],
+    description: "Blown by hand in a Copenhagen studio by glassmaker Sigrid Mæhl, each Nordlys holder is unique. The characteristic smoke gradient — deepest at the base, clearing to near transparency at the rim — is achieved through controlled exposure to birch resin smoke mid-blow. No two pieces share the same tonal pattern. Holds a standard taper or dinner candle. The weight and base diameter ensure exceptional stability.",
+    specs: [
+      ["Material", "Hand-blown borosilicate glass"],
+      ["Height", "185 mm"],
+      ["Base diameter", "88 mm"],
+      ["Candle diameter", "22 mm (standard)"],
+      ["Weight", "340 g"],
+      ["Dishwasher safe", "No — hand wash only"],
+      ["Country of origin", "Denmark"],
+      ["Barcode (EAN-13)", "5 700432 991027"],
+    ],
+  },
+  {
+    id: 3,
+    name: "Chronos Field Watch",
+    category: "Horology",
+    tag: "Swiss Automatic Movement",
+    price: "R1,950",
+    priceNum: 1950,
+    stock: 3,
+    images: [
+      "photo_2026-06-09_07-59-41.jpg",
+      "photo_2026-06-09_07-59-45.jpg",
+      "photo_2026-06-09_07-59-49.jpg",
+      "photo_2026-06-09_07-59-52.jpg",
+    ],
+    description: "A field watch conceived in the Swiss Jura, the Chronos is built around a Sellita SW200-1 automatic movement visible through the sapphire exhibition caseback. The matte PVD steel case is finished to military-grade tolerances, while the Fumé dial — graduated from near-black at the centre to warm charcoal at the periphery — ensures legibility across any light condition. Issued on a hand-stitched dark tobacco leather strap.",
+    specs: [
+      ["Movement", "Sellita SW200-1, automatic"],
+      ["Power reserve", "38 hours"],
+      ["Case material", "316L steel, matte PVD"],
+      ["Case diameter", "39 mm"],
+      ["Thickness", "10.8 mm"],
+      ["Water resistance", "100m / 10 ATM"],
+      ["Crystal", "Sapphire, AR coated both sides"],
+      ["Barcode (EAN-13)", "7 610522 030091"],
+    ],
+  },
+  {
+    id: 4,
+    name: "Silva Leather Field Notebook",
+    category: "Stationery",
+    tag: "Vegetable-tanned Italian Leather",
+    price: "R145",
+    priceNum: 145,
+    stock: 22,
+    images: [
+      "photo_2026-06-09_08-14-02.jpg",
+      "photo_2026-06-09_08-14-06.jpg",
+      "photo_2026-06-09_08-14-09.jpg",
+      "photo_2026-06-09_08-14-13.jpg",
+    ],
+    description: "The Silva cover is cut from a single hide of Tuscany's finest vegetable-tanned leather — the same origin used by Florentine artisans for centuries. It patinas gloriously with time, forming a record of everywhere the notebook has been. Inside, 192 pages of cream-white, acid-free Fabriano paper await in a grid pattern calculated for both the architect and the diarist. A slim copper pencil loop is hand-stitched along the spine.",
+    specs: [
+      ["Cover material", "Veg-tanned cowhide, natural"],
+      ["Paper", "Fabriano 90 gsm, acid-free"],
+      ["Format", "A5 (148 × 210 mm)"],
+      ["Pages", "192 (96 leaves)"],
+      ["Ruling", "5 mm dot grid"],
+      ["Binding", "Lay-flat sewn binding"],
+      ["Closure", "Leather wrap & brass stud"],
+      ["Barcode (EAN-13)", "8 031466 600428"],
+    ],
+  },
+  {
+    id: 5,
+    name: "Opaline Brass Desk Loupe",
+    category: "Scientific Instruments",
+    tag: "Optical Glass · Solid Brass",
+    price: "R320",
+    priceNum: 320,
+    stock: 0,
+    images: [
+        "photo_2026-06-09_08-19-06.jpg",
+      "photo_2026-06-09_08-19-10.jpg",
+      "photo_2026-06-09_08-19-13.jpg",
+      "photo_2026-06-09_08-19-17.jpg",
+    ],
+    description: "The Opaline is a 10× desk loupe machined entirely from solid brass in a Coventry workshop that has supplied optical instruments since 1955. Its ground-glass lens — optically coated to eliminate chromatic aberration — reveals detail invisible to the naked eye with crystalline fidelity. A collector's piece and a working precision tool in equal measure. The barrel's natural unlacquered finish will warm and patina with handling over years of use.",
+    specs: [
+      ["Magnification", "10× (100mm focal length)"],
+      ["Lens diameter", "30 mm"],
+      ["Lens type", "Doublet, anti-reflection coated"],
+      ["Body material", "Solid brass, unlacquered"],
+      ["Height (extended)", "82 mm"],
+      ["Weight", "190 g"],
+      ["Country of origin", "United Kingdom"],
+      ["Barcode (EAN-13)", "5 052099 012348"],
+    ],
+  },
+];
+
+// ── PAGE ROUTING ──────────────────────────────────────────────────────────────
+function showPage(name, productId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+
+  const navBtn = document.getElementById('nav-' + name);
+  if (navBtn) navBtn.classList.add('active');
+  else if (name === 'product') document.getElementById('nav-home').classList.add('active');
+
+  if (name === 'product' && productId !== undefined) {
+    renderProductDetail(productId);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── RENDER CATALOGUE GRID ─────────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = products.map((p, i) => `
+    <div class="product-card" onclick="showPage('product', ${i})">
+      <div class="card-arrow">↗</div>
+      <img class="product-card-img" src="${p.images[0]}" alt="${p.name}" loading="lazy" />
+      <div class="product-card-body">
+        <div class="product-card-num">No. 0${i+1}</div>
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-tag">${p.tag}</div>
+        <div class="product-card-price">${p.price}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── RENDER PRODUCT DETAIL ──────────────────────────────────────────────────────
+function renderProductDetail(idx) {
+  const p = products[idx];
+
+  document.getElementById('pd-bc-name').textContent = p.name;
+  document.getElementById('pd-category').textContent = p.category;
+  document.getElementById('pd-title').textContent = p.name;
+  document.getElementById('pd-price').textContent = p.price;
+  document.getElementById('pd-desc').textContent = p.description;
+
+  // Stock
+  const stockEl = document.getElementById('pd-stock');
+  if (p.stock === 0) {
+    stockEl.textContent = 'Out of Stock';
+    stockEl.className = 'pd-stock stock-no';
+  } else if (p.stock <= 5) {
+    stockEl.textContent = `Only ${p.stock} remaining`;
+    stockEl.className = 'pd-stock stock-low';
+  } else {
+    stockEl.textContent = `${p.stock} in stock`;
+    stockEl.className = 'pd-stock stock-yes';
+  }
+
+  // Main image
+  const mainImg = document.getElementById('pd-main-img');
+  mainImg.src = p.images[0];
+  mainImg.alt = p.name;
+
+  // Thumbnails
+  const thumbs = document.getElementById('pd-thumbs');
+  thumbs.innerHTML = p.images.map((src, i) => `
+    <img class="pd-thumb ${i===0?'active':''}" src="${src}" alt="${p.name} view ${i+1}"
+         onclick="selectThumb(this, '${src}')" loading="lazy" />
+  `).join('');
+
+  // Spec table
+  const table = document.getElementById('pd-table');
+  table.innerHTML = p.specs.map(([k,v]) => `
+    <tr><td>${k}</td><td>${v}</td></tr>
+  `).join('');
+
+  // Buy button
+  const buyBtn = document.querySelector('.buy-btn');
+  if (p.stock === 0) {
+    buyBtn.textContent = 'Currently Unavailable';
+    buyBtn.style.background = '#333';
+    buyBtn.style.color = '#777';
+    buyBtn.style.cursor = 'not-allowed';
+  } else {
+    buyBtn.textContent = 'Buy Now — Add to Bag';
+    buyBtn.style.background = '';
+    buyBtn.style.color = '';
+    buyBtn.style.cursor = '';
+  }
+
+  // Store current product for buy handler
+  window._currentProduct = p;
+}
+
+function selectThumb(el, src) {
+  document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const mainImg = document.getElementById('pd-main-img');
+  mainImg.style.opacity = '0';
+  mainImg.style.transition = 'opacity 0.25s';
+  setTimeout(() => {
+    mainImg.src = src;
+    mainImg.style.opacity = '1';
+  }, 200);
+}
+
+// ── BUY & SUBMIT ──────────────────────────────────────────────────────────────
+function handleBuy() {
+  const p = window._currentProduct;
+  if (!p || p.stock === 0) return;
+  showToast(`${p.name} added to your bag ✓`);
+}
+
+function handleSubmit() {
+  showToast('Message sent — we will be in touch shortly');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderGrid();
+</script>
+</body>
+</html>
